@@ -1,0 +1,37 @@
+{{ template "header.html" .}}
+
+	<main class="container">
+
+	  <section id="preview">
+		<h2>Certificate Details</kbd></h2>
+		
+		<h4>By Issuing CA</h4>
+		<figure>
+			<table role="grid">
+			<thead>
+				<tr>
+				<th scope="col"><b>CA Issuer</b></th>
+				<th scope="col"><b># Certificates</b></th>
+				<th scope="col"></th>
+				</tr>
+			</thead>
+			<tbody>
+				{{ range .PerCAResults }}
+				<tr>
+					<td style="font-size:14px; text-align: left;">{{ .CAIssuerDN }}</td>
+					<td style="text-align: center;">{{ .CertCount }}</td>
+					<td><a href="filter={{ .CAID }}">filter by CA</a></td>
+				</tr>
+				{{ end }}
+			</tbody>
+			</table>
+		</figure>
+
+
+	  </section>
+
+	</main>
+
+  </body>
+
+{{ template "footer.html" .}}

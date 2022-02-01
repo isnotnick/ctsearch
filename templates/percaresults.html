@@ -1,0 +1,45 @@
+{{ template "header.html" .}}
+
+	<main class="container">
+
+	  <section id="preview">
+		<h2>CT Search for <kbd>{{ .DomainName }}</kbd></h2>
+		<p>Results are for <i>unexpired</i> certificates and <i>deduplicated</i>.</p>
+		
+		<h4>All Certificates for: </br></b><small>{{ .CAName }}</small></br>({{ .ResultSize }} total)</h4>
+		<figure id="certResults">
+			<input class="search" placeholder="Search and filter - just type..." />
+
+			<table role="grid">
+			<thead>
+				<tr>
+				<th scope="col"><b>Common Name</b></th>
+				<th scope="col"><b>SAN Count</b></th>
+				<th scope="col"><b>notBefore</b></th>
+				<th scope="col"><b>notAfter</b></th>
+				<th scope="col"><b>Cert Type</b></th>
+				<th scope="col"><b>Validation</b></th>
+				</tr>
+			</thead>
+			<tbody class="list">
+				{{ range .CertResultsList }}
+				<tr>
+					<td class="commonname" style="font-size:14px; text-align: left;"><a href="https://crt.sh/?id={{ .CertID }}" target="_BLANK">{{ .CommonName }}</a></td>
+					<td style="text-align: center;">{{ .SANCount }}</td>
+					<td style="font-size:11px;">{{ .NotBefore }}</td>
+					<td style="font-size:11px;">{{ .NotAfter }}</td>
+					<td class="certtype">{{ .CertType }}</td>
+					<td class="valtype">{{ .ValType }}</td>
+				</tr>
+				{{ end }}
+			</tbody>
+			</table>
+		</figure>
+
+	  </section>
+
+	</main>
+
+  </body>
+
+{{ template "footer.html" .}}

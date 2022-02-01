@@ -1,0 +1,20 @@
+{{ template "header.html" .}}
+
+	<main class="container">
+
+	  <section id="preview">
+		<h2>CT Search</h2>
+		<p>Search Certificate Transparency logs by domain name.</p>
+		<form method="get" action="/domainsearch">
+		  <div class="grid">
+			<input type="search" id="domainName" name="domainName" placeholder="Search by domain name">
+			<button type="submit">Search</button>
+		  </div>
+		</form>
+	  </section>
+
+	</main>
+
+  </body>
+
+{{ template "footer.html" .}}
