@@ -93,7 +93,7 @@ func main() {
 		panic(err)
 	
 }
-	router.Run("0.0.0.0:8080")
+	router.Run("0.0.0.0:9443")
 }
 
 //	Main index/search page
