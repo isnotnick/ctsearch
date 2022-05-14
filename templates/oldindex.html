@@ -1,0 +1,29 @@
+{{ template "header.html" .}}
+
+<div id="layout">
+	<!-- Menu toggle -->
+	<a href="#menu" id="menuLink" class="menu-link">
+		<!-- Hamburger icon -->
+		<span></span>
+	</a>
+
+	{{ template "nav.html" .}}
+
+	<div id="main">
+		<div class="header">
+			<h1>{{ .title }}</h1>
+			<!-- <h2>subtitle</h2> -->
+		</div>
+
+		<div class="content">
+			<h2 class="content-subhead">How to use this layout</h2>
+			<p>
+				To use this layout, you can just copy paste the HTML, along with the CSS in <a href="/layouts/side-menu/styles.css" alt="Side Menu CSS">side-menu.css</a>, and the JavaScript in <a href="/js/ui.js">ui.js</a>. The JS file uses vanilla JavaScript to simply toggle an <code>active</code> class that makes the menu responsive.
+			</p>
+
+			<div id="wrapper"></div>
+		</div>
+	</div>
+</div>
+
+{{ template "footer.html" .}}

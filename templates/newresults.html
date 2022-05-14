@@ -1,0 +1,50 @@
+{{ template "header.html" .}}
+
+<div id="layout">
+	<!-- Menu toggle -->
+	<a href="#menu" id="menuLink" class="menu-link">
+		<!-- Hamburger icon -->
+		<span></span>
+	</a>
+
+	{{ template "nav.html" .}}
+
+	<div id="main">
+		<div class="header">
+			<h1>Page Title</h1>
+			<h2>A subtitle for your page goes here</h2>
+		</div>
+
+		<div class="content">
+			<h2 class="content-subhead">How to use this layout</h2>
+			<p>
+				To use this layout, you can just copy paste the HTML, along with the CSS in <a href="/layouts/side-menu/styles.css" alt="Side Menu CSS">side-menu.css</a>, and the JavaScript in <a href="/js/ui.js">ui.js</a>. The JS file uses vanilla JavaScript to simply toggle an <code>active</code> class that makes the menu responsive.
+			</p>
+
+			<div id="wrapper"></div>
+		</div>
+	</div>
+</div>
+
+{{ template "footer.html" .}}
+
+<script src="/gridjs-umd-5.02.js"></script>
+<script src="/pure-ui.js"></script>
+
+<script type="text/javascript">
+	const grid = new gridjs.Grid({
+		search: true,
+		sort: true,
+		pagination: {
+			limit: 25
+		},
+		columns: [{name: 'CACertID', hidden: true}, {name: 'CertID', hidden:true}, 'Common Name', 'CA', 'SANs', 'notBefore', 'notAfter', 'Type', 'Validation'],
+		className: {
+			table: 'pure-table-striped'
+		},
+		server: {
+			url: 'http://code.nick.lol:8088/api/v1/domain/allvalid/digicert.com',
+			then: data => data.map(cert => [cert.CACertID, cert.CertID, cert.CommonName, cert.CABrand, cert.SANCount, cert.NotBefore, cert.NotAfter, cert.CertType, cert.ValType])
+		},
+		}).render(document.getElementById("wrapper"));
+</script>

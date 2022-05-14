@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+	<meta charset="utf-8">
+
+	<title>{{ .title }}</title>
+	<link rel="icon" href="favicon.ico">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- Theme for grid.js -->
+	<link rel="stylesheet" href="/mermaid.gridjs.css">
+
+	<!-- CSS for site; mostly from min framework -->
+	<link rel="stylesheet" href="/ctlogsearch.css">
+	
+</head>
+
+<body>
+	<!-- Nav -->
+	<nav class="nav" tabindex="-1" onclick="this.focus()">
+		<div class="container">
+			<a class="pagename current" href="/">ctlogsearch</a>
+			<a href="/about">About</a> 
+		</div>
+	</nav>
+
+	<!-- Main -->
+	<div class="container">
+
+		<h1>Certificate Transparency Search</h1>
+
+		<input type="search" id="domainNameInput" name="search" placeholder="Enter domain name..." class="searchbox" tabindex="0" autofocus="on" onKeydown="if (event.keyCode == 13) {document.getElementById('ctSearchButton').click()};">
+		&nbsp;&nbsp;
+		<input type="submit" value="Search" onclick="ctSearch()" class="btn btn-b smooth" style="display: inline-block;" id="ctSearchButton">
+		<br/><br/>
+				
+		<div id="searchInfo" style="display: none;">
+			<h2>Search results for [ <kbd id="domainNameDisplay"></kbd> ]</h2>
+			<p>Results are for any subdomain, and are <i>deduplicated</i> (certificates and pre-certificates), covering only <i>unexpired</i> certificates.</p>
+			<h4><a id="downloadLink" href="">Download</a> results (in CSV)</h4>
+		</div>
+
+		<div id="certResultsPerCA"></div>
+
+		<br/><hr><br/>
+
+		<div id="certResults"></div>
+
+		<br/><br/>
+	</div>
+
+	<!-- Javascript: grid.js for the data tables -->
+	<script src="/gridjs-umd-5.02.js"></script>
+	<script type="text/javascript">
+		function ctSearch() {
+			searchDomainName = document.getElementById('domainNameInput').value;
+
+			document.getElementById('domainNameDisplay').innerHTML = searchDomainName;
+
+			if (document.getElementById('searchInfo').style.display === 'none') {
+				document.getElementById('searchInfo').style.display = 'block';
+			}
+
+			if (document.getElementById('certResultsPerCA').innerHTML === '') {
+				gridPerCA = new gridjs.Grid({
+					search: false,
+					sort: true,
+					style: {
+						table: {
+							'class': 'table',
+						},
+						td: {
+							'font-size': '12px',
+						},
+						th: {
+							'font-size': '14px',
+						},
+						footer: {
+							'font-size': '12px',
+						},
+					},
+					columns: [{name:'CACertID', hidden: true}, 'CA Common Name', 'Number Of Certs'],
+					server: {
+						url: '/api/v1/domainperca/allvalid/' + searchDomainName,
+						then: data => data.map(cert => [cert.CACertID, cert.CAIssuerDN, cert.CertCount])
+					},
+				}).render(document.getElementById('certResultsPerCA'));
+			} else {
+				gridPerCA.updateConfig({
+					server: {
+						url: '/api/v1/domainperca/allvalid/' + searchDomainName,
+						then: data => data.map(cert => [cert.CACertID, cert.CAIssuerDN, cert.CertCount])
+					},
+				}).forceRender();
+			}
+
+			if (document.getElementById('certResults').innerHTML === "") {
+				gridCerts = new gridjs.Grid({
+					search: true,
+					sort: true,
+					//fixedHeader: true,
+					//height: '800px',
+					pagination: {
+						limit: 25,
+					},
+					language: {
+						'search': {
+							'placeholder': '🔍    Search in results...'
+						},
+					},
+					style: {
+						table: {
+							'class': 'table',
+						},
+						td: {
+							'font-size': '12px',
+						},
+						th: {
+							'font-size': '14px',
+						},
+						footer: {
+							'font-size': '12px',
+						},
+					},
+					columns: [{name: 'CACertID', hidden: true}, {name: 'CertID', hidden:true}, 'Common Name', 'CA', 'SANs', 'notBefore', 'notAfter', 'Type', 'Validation'],
+					server: {
+						url: '/api/v1/domain/allvalid/' + searchDomainName,
+						then: data => data.map(cert => [cert.CACertID, cert.CertID, cert.CommonName, cert.CABrand, cert.SANCount, cert.NotBefore, cert.NotAfter, cert.CertType, cert.ValType])
+					},
+				}).render(document.getElementById('certResults'));
+			} else {
+				gridCerts.updateConfig({
+					server: {
+						url: '/api/v1/domain/allvalid/' + searchDomainName,
+						then: data => data.map(cert => [cert.CACertID, cert.CertID, cert.CommonName, cert.CABrand, cert.SANCount, cert.NotBefore, cert.NotAfter, cert.CertType, cert.ValType])
+					},
+				}).forceRender();
+			}
+
+			document.getElementById('downloadLink').href = '/api/v1/domain/allvalid/exportcsv/' + searchDomainName;
+		}
+	</script>
+</body>
+
+</html>

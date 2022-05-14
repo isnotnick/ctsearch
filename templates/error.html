@@ -1,31 +1,22 @@
-<!doctype html>
-<html lang="en">
+{{ template "header.html" .}}
 
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>CT Search Error</title>
-		<meta name="description" content="">
-		<link rel="shortcut icon" href="">
-		<link rel="canonical" href="">
+<div id="layout">
+	<!-- Menu toggle -->
+	<a href="#menu" id="menuLink" class="menu-link">
+		<!-- Hamburger icon -->
+		<span></span>
+	</a>
 
-		<!-- Pico.css -->
-		<link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+	{{ template "nav.html" .}}
 
-	</head>
+	<div id="main">
+		<div class="content">
+			<h2 class="content-subhead">Error</h2>
+			<p>{{ .ErrorMessage }}</p>
 
-  <body>
+			<div id="wrapper"></div>
+		</div>
+	</div>
+</div>
 
-	<main class="container">
-
-	  <section id="preview">
-		<h2>Error</h2>
-		<p>{{ .ErrorMessage }}</p>
-
-	  </section>
-
-	</main>
-
-  </body>
-
-</html>
+{{ template "footer.html" .}}

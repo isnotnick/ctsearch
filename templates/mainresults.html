@@ -21,7 +21,7 @@
 				<tr>
 					<td style="font-size:14px; text-align: left;">{{ .CAIssuerDN }}</td>
 					<td style="text-align: center;">{{ .CertCount }}</td>
-					<td><a href="/domainsearch/ca/{{ .CAID }}/{{ $.DomainName }}">filter by CA</a></td>
+					<td><a href="/domainsearch/ca/{{ .CACertID }}/{{ $.DomainName }}">filter by CA</a></td>
 				</tr>
 				{{ end }}
 			</tbody>
@@ -29,14 +29,14 @@
 		</figure>
 
 		<h4>All Certificates ({{ .ResultSize }} total)</h4>
-		<h6><a href="/domainsearch/exportcsv/{{ .DomainName }}">Download results</a></h6>
+		<h6><a href="/domainsearch/exportcsv/{{ .DomainName }}">Download results (in CSV)</a></h6>
 		<figure id="certResults">
 			<input class="search" placeholder="Search" />
 
 			<table role="grid">
 			<thead>
 				<tr>
-				<th scope="col"><b>Common Name</b></th>
+				<th scope="col" class="sort" data-sort="commonname"><b>Common Name</b></th>
 				<th scope="col"><b>CA Owner</b></th>
 				<th scope="col"><b>SAN Count</b></th>
 				<th scope="col"><b>notBefore</b></th>
@@ -59,15 +59,19 @@
 				{{ end }}
 			</tbody>
 			</table>
+			<ul class="pagination"></ul>
 		</figure>
 
 	  </section>
 
 	</main>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script> -->
 	<script type="text/javascript">
 		var options = {
-			valueNames: [ 'commonname', 'certtype', 'valtype' ]
+			valueNames: [ 'commonname', 'certtype', 'valtype' ],
+			page: 25,
+			pagination: true,
 		};
 
 		var userList = new List('certResults', options);

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>{{ .title }}</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+	<link rel="stylesheet" href="/mermaid.gridjs.css">
+	<link rel="icon" href="favicon.ico">
+</head>
+
+<body>
+  <div>
+	<div class="columns is-multiline">
+	</div>
+	<nav class="navbar py-4">
+	  <div class="container is-fluid">
+		<div class="navbar-brand">
+		  <a class="navbar-item" href="#">
+			<img class="image" src="https://bulma.io/images/bulma-logo.png" alt="" width="96px">
+		  </a>
+		  <a class="navbar-burger" role="button" aria-label="menu" aria-expanded="false">
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+		  </a>
+		</div>
+		<div class="navbar-menu">
+			<div class="navbar-start">
+				<a class="navbar-item" href="#">CT Search</a>
+				<a class="navbar-item" href="#">CSR Decoder</a>
+				<a class="navbar-item" href="#">CSR Generator</a>
+				<a class="navbar-item" href="#">TLS Tester</a>
+			</div>
+		</div>
+	  </div>
+	</nav>
+
+	<section class="section">
+		<div class="container">
+			<div class="mb-6 pb-3 columns is-multiline">
+				<div class="column is-12 is-6-desktop mx-auto has-text-centered">
+					<h5 class="mb-4 is-size-3 is-size-3-mobile has-text-weight-bold">Certificate Transparency Log Search</h5>
+				</div>
+			</div>
+			<div class="field is-grouped">
+				<label class="label">Name</label>
+				<div class="control">
+				  <input class="input" type="text" placeholder="Text input">
+				</div>
+			  </div>
+
+			<div class="field">
+				<label class="label">Subject</label>
+					<div class="control">
+						<div class="select">
+							<select>
+								<option>Select dropdown</option>
+								<option>With options</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			  
+
+			<div id="wrapper"></div>
+		</div>
+	</section>
+
+
+	<footer class="section">
+
+	  <div class="container">
+		<div class="pb-5 is-flex is-flex-wrap-wrap is-justify-content-between is-align-items-center">
+		  <div class="mr-auto mb-2">
+				<a class="is-inline-block" href="#">
+				<img class="image" src="https://bulma.io/images/bulma-logo.png" alt="" width="96px"></a>
+		  </div>
+		  <div>
+			<ul class="is-flex is-flex-wrap-wrap is-align-items-center is-justify-content-center">
+				<li class="mr-4"><a class="button is-white" href="#">About</a></li>
+			</ul>
+		  </div>
+		</div>
+	  </div>
+
+	  <div class="pt-5" style="border-top: 1px solid #dee2e6;"></div>
+	  <div class="container">
+		<div class="is-flex-tablet is-justify-content-between is-align-items-center">
+		  <p>© 2022 N France</p>
+		</div>
+	  </div>
+
+	</footer>
+
+  </div>
+		<script src="/gridjs-umd-5.02.js"></script>
+		<script src="/pure-ui.js"></script>
+
+		<script type="text/javascript">
+		const grid = new gridjs.Grid({
+			search: true,
+			sort: true,
+			pagination: {
+				limit: 25
+			},
+			columns: [{name: 'CACertID', hidden: true}, {name: 'CertID', hidden:true}, 'Common Name', 'CA', 'SANs', 'notBefore', 'notAfter', 'Type', 'Validation'],
+			server: {
+				url: 'http://code.nick.lol:8088/api/v1/domain/allvalid/digicert.com',
+				then: data => data.map(cert => [cert.CACertID, cert.CertID, cert.CommonName, cert.CABrand, cert.SANCount, cert.NotBefore, cert.NotAfter, cert.CertType, cert.ValType])
+			},
+			}).render(document.getElementById("wrapper"));
+		</script>
+</body>
+
+</html>
